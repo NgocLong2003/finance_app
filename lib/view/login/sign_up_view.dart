@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:trackizer/view/login/sign_in_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/primary_button.dart';
 import '../../common_widget/round_textfield.dart';
+import '../../common_widget/secondary_boutton.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
+
+  
 
   @override
   State<SignUpView> createState() => _SignUpViewState();
@@ -21,24 +25,26 @@ class _SignUpViewState extends State<SignUpView> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool doPasswordsMatch(String password, String confirmPassword) {
-    return password == confirmPassword;
+                  return password == confirmPassword;
   }
 
   bool isValidEmail(String email) {
-    String emailPattern = r'^[^@]+@[^@]+\.[^@]+';
-    RegExp regExp = RegExp(emailPattern);
-    return regExp.hasMatch(email);
-  }
+                // Biểu thức chính quy kiểm tra email hợp lệ
+                String emailPattern = r'^[^@]+@[^@]+\.[^@]+';
+                RegExp regExp = RegExp(emailPattern);
+                
+                return regExp.hasMatch(email);
+              }
 
-  void showSnackBarMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.redAccent,
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
+      void showSnackBarMessage(BuildContext context, String message) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.redAccent,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
 
   Future<void> signUpWithEmail() async {
     String email = txtEmail.text.trim();
@@ -80,17 +86,23 @@ class _SignUpViewState extends State<SignUpView> {
             children: [
               const SizedBox(height: 50),
               Center(
-                child: Image.asset(
-                  "assets/img/app_logo.png",
+                  child: Image.asset(
+                    "assets/img/app_logo.png",
                   width: media.width,
                   fit: BoxFit.fitWidth,
-                ),
+                  ),
+              const SizedBox(
+                height: 50,
               ),
               const SizedBox(height: 50),
               RoundTextField(
                 title: "E-mail address",
                 controller: txtEmail,
                 keyboardType: TextInputType.emailAddress,
+                
+              ),
+              const SizedBox(
+                height: 15,
               ),
               const SizedBox(height: 15),
               RoundTextField(

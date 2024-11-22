@@ -61,6 +61,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                   const SizedBox(
                     height: 30,
                   ),
+                  
                   PrimaryButton(
                     title: "Get started",
                     onPressed: () {

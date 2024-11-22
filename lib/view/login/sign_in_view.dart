@@ -58,6 +58,8 @@ class _SignInViewState extends State<SignInView> {
           ),
         ],
       ),
+    );
+  }
   
   @override
   Widget build(BuildContext context) {

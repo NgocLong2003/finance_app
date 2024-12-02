@@ -91,9 +91,11 @@ class _SignUpViewState extends State<SignUpView> {
                   width: media.width,
                   fit: BoxFit.fitWidth,
                   ),
+              ),
               const SizedBox(
                 height: 50,
               ),
+
               const SizedBox(height: 50),
               RoundTextField(
                 title: "E-mail address",

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../common/color_extension.dart';
+import '../view/theme/theme_notifier.dart';
 
 class SubScriptionHomeRow extends StatelessWidget {
   final Map sObj;
@@ -11,6 +13,8 @@ class SubScriptionHomeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
@@ -21,7 +25,7 @@ class SubScriptionHomeRow extends StatelessWidget {
            padding: const EdgeInsets.all( 10),
           decoration: BoxDecoration(
             border: Border.all(
-              color: TColor.border.withOpacity(0.15),
+              color: themeNotifier.secondContainerColor,
             ),
             
             borderRadius: BorderRadius.circular(16),
@@ -43,7 +47,7 @@ class SubScriptionHomeRow extends StatelessWidget {
                 child: Text(
                   sObj["name"],
                   style: TextStyle(
-                      color: TColor.white,
+                      color: themeNotifier.textColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w600),
                 ),
@@ -54,7 +58,7 @@ class SubScriptionHomeRow extends StatelessWidget {
               Text(
                 "\$${sObj["price"]}",
                 style: TextStyle(
-                    color: TColor.white,
+                    color: themeNotifier.textColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w600),
               )

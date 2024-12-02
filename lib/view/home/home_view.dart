@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trackizer/common/color_extension.dart';
 
 import '../../common_widget/custom_arc_painter.dart';
@@ -8,6 +9,7 @@ import '../../common_widget/subscription_home_row.dart';
 import '../../common_widget/upcoming_bill_row.dart';
 import '../settings/settings_view.dart';
 import '../subscription_info/subscription_info_view.dart';
+import '../theme/theme_notifier.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -50,16 +52,19 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+
     var media = MediaQuery.sizeOf(context);
     return Scaffold(
-      backgroundColor: TColor.gray,
+      backgroundColor: themeNotifier.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               height: media.width * 1.1,
               decoration: BoxDecoration(
-                  color: TColor.gray70.withOpacity(0.5),
+                  color: themeNotifier.containerColor,
                   borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(25),
                       bottomRight: Radius.circular(25))),
@@ -115,7 +120,7 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         "\$1,235",
                         style: TextStyle(
-                            color: TColor.white,
+                            color: themeNotifier.textColor,
                             fontSize: 40,
                             fontWeight: FontWeight.w700),
                       ),
@@ -125,7 +130,7 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         "This month bills",
                         style: TextStyle(
-                            color: TColor.gray40,
+                            color: themeNotifier.textColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w600),
                       ),
@@ -140,13 +145,13 @@ class _HomeViewState extends State<HomeView> {
                             border: Border.all(
                               color: TColor.border.withOpacity(0.15),
                             ),
-                            color: TColor.gray60.withOpacity(0.3),
+                            color: themeNotifier.containerColor,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(
                             "See your budget",
                             style: TextStyle(
-                                color: TColor.white,
+                                color: themeNotifier.textColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600),
                           ),
@@ -204,12 +209,13 @@ class _HomeViewState extends State<HomeView> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               height: 50,
               decoration: BoxDecoration(
-                  color: Colors.black, borderRadius: BorderRadius.circular(15)),
+                  color: themeNotifier.box, borderRadius: BorderRadius.circular(15)),
               child: Row(
                 children: [
                   Expanded(
                     child: SegmentButton(
                       title: "Your subscription",
+
                       isActive: isSubscription,
                       onPressed: () {
                         setState(() {

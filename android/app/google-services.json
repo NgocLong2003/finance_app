@@ -3,7 +3,7 @@
     "project_number": "410209894189",
     "firebase_url": "https://financeapp-30b56-default-rtdb.firebaseio.com",
     "project_id": "financeapp-30b56",
-    "storage_bucket": "financeapp-30b56.appspot.com"
+    "storage_bucket": "financeapp-30b56.firebasestorage.app"
   },
   "client": [
     {
@@ -20,6 +20,14 @@
           "android_info": {
             "package_name": "com.codeforany.trackizer",
             "certificate_hash": "1f70d0dc8b6a7c4863f0edb3dff75bc76e239873"
+          }
+        },
+        {
+          "client_id": "410209894189-o7n6m1s8ktkq8u1m1rem6nddb76kafp8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codeforany.trackizer",
+            "certificate_hash": "a8c9d1e3402acb93df027d57fbd619733a0bc0ff"
           }
         },
         {

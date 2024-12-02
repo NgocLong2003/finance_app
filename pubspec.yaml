@@ -30,7 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  provider: ^6.0.0
+  shared_preferences: ^2.0.15
     
 
 
@@ -45,7 +46,7 @@ dependencies:
   card_swiper:
     path: dev_lib/card_swiper
   firebase_auth: ^5.3.1
-  firebase_core: ^3.6.0
+  firebase_core: ^3.8.0
   google_sign_in: ^5.4.4
 
 dev_dependencies:

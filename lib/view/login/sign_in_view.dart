@@ -6,6 +6,7 @@ import '../../common/color_extension.dart';
 import '../../common_widget/primary_button.dart';
 import '../../common_widget/round_textfield.dart';
 import '../../common_widget/secondary_boutton.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -45,20 +46,22 @@ class _SignInViewState extends State<SignInView> {
 
   void _showErrorDialog(String message) {
     showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Lỗi'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-  
+        context: context,
+        builder: (ctx) =>
+            AlertDialog(
+              title: const Text('Lỗi'),
+              content: Text(message),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            )
+    );
+  }
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);

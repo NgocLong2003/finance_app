@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:trackizer/view/add_subscription/add_subscription_view.dart';
 
 import '../../common/color_extension.dart';
@@ -7,6 +8,7 @@ import '../calender/calender_view.dart';
 import '../card/cards_view.dart';
 import '../home/home_view.dart';
 import '../spending_budgets/spending_budgets_view.dart';
+import '../theme/theme_notifier.dart';
 
 class MainTabView extends StatefulWidget {
   const MainTabView({super.key});
@@ -29,8 +31,10 @@ class _MainTabViewState extends State<MainTabView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeData currentTheme = Theme.of(context);
     return Scaffold(
-      backgroundColor: TColor.gray,
+      backgroundColor: themeNotifier.containerColor,
       body: Stack(children: [
         PageStorage(bucket: pageStorageBucket, child: currentTabView),
         SafeArea(
@@ -62,8 +66,8 @@ class _MainTabViewState extends State<MainTabView> {
                                 width: 20,
                                 height: 20,
                                 color: selectTab == 0
-                                    ? TColor.white
-                                    : TColor.gray30,
+                                    ? themeNotifier.textColor
+                                    : themeNotifier.secondContainerColor,
                               ),
                             ),
                             IconButton(
@@ -78,8 +82,8 @@ class _MainTabViewState extends State<MainTabView> {
                                 width: 20,
                                 height: 20,
                                 color: selectTab == 1
-                                    ? TColor.white
-                                    : TColor.gray30,
+                                    ? themeNotifier.textColor
+                                    : themeNotifier.secondContainerColor,
                               ),
                             ),
                             const SizedBox(
@@ -98,8 +102,8 @@ class _MainTabViewState extends State<MainTabView> {
                                 width: 20,
                                 height: 20,
                                 color: selectTab == 2
-                                    ? TColor.white
-                                    : TColor.gray30,
+                                    ? themeNotifier.textColor
+                                    : themeNotifier.secondContainerColor,
                               ),
                             ),
                             IconButton(
@@ -114,8 +118,8 @@ class _MainTabViewState extends State<MainTabView> {
                                 width: 20,
                                 height: 20,
                                 color: selectTab == 3
-                                    ? TColor.white
-                                    : TColor.gray30,
+                                    ? themeNotifier.textColor
+                                    : themeNotifier.secondContainerColor,
                               ),
                             ),
                           ],
@@ -130,7 +134,7 @@ class _MainTabViewState extends State<MainTabView> {
                         margin: const EdgeInsets.all(20),
                         decoration: BoxDecoration(boxShadow: [
                           BoxShadow(
-                              color: TColor.secondary.withOpacity(0.25),
+                              color: themeNotifier.backgroundColor.withOpacity(0.25),
                               blurRadius: 10,
                               offset: const Offset(0, 4))
                         ], borderRadius: BorderRadius.circular(50)),

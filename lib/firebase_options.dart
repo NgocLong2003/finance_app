@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '410209894189',
     projectId: 'financeapp-30b56',
     databaseURL: 'https://financeapp-30b56-default-rtdb.firebaseio.com',
-    storageBucket: 'financeapp-30b56.appspot.com',
+    storageBucket: 'financeapp-30b56.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -64,8 +64,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '410209894189',
     projectId: 'financeapp-30b56',
     databaseURL: 'https://financeapp-30b56-default-rtdb.firebaseio.com',
-    storageBucket: 'financeapp-30b56.appspot.com',
+    storageBucket: 'financeapp-30b56.firebasestorage.app',
+    androidClientId: '410209894189-fucu1ada8frnbr596vos9v7n2b8peuqu.apps.googleusercontent.com',
     iosClientId: '410209894189-sfchq2o94n6v5nhfqkbp1blogaakvevg.apps.googleusercontent.com',
     iosBundleId: 'com.codeforany.trackizer',
   );
+
 }

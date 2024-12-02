@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../common/color_extension.dart';
+import '../view/theme/theme_notifier.dart';
 
 class StatusButton extends StatelessWidget {
   final String title;
@@ -17,6 +19,8 @@ class StatusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
     return InkWell(
       onTap: onPressed,
       child: Stack(
@@ -28,7 +32,7 @@ class StatusButton extends StatelessWidget {
               border: Border.all(
                 color: TColor.border.withOpacity(0.15),
               ),
-              color: TColor.gray60.withOpacity(0.2),
+              color: themeNotifier.paddingColor,
               borderRadius: BorderRadius.circular(16),
             ),
             alignment: Alignment.center,
@@ -38,14 +42,14 @@ class StatusButton extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                      color: TColor.gray40,
+                      color: currentThemeMode == ThemeMode.dark? TColor.gray40: Colors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.w600),
                 ),
                 Text(
                   value,
                   style: TextStyle(
-                      color: TColor.white,
+                      color: currentThemeMode == ThemeMode.dark? TColor.white: Colors.blueGrey,
                       fontSize: 14,
                       fontWeight: FontWeight.w600),
                 ),

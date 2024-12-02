@@ -1,10 +1,12 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trackizer/common/color_extension.dart';
 import 'package:trackizer/common_widget/budgets_row.dart';
 import 'package:trackizer/common_widget/custom_arc_180_painter.dart';
 
 import '../settings/settings_view.dart';
+import '../theme/theme_notifier.dart';
 
 class SpendingBudgetsView extends StatefulWidget {
   const SpendingBudgetsView({super.key});
@@ -14,6 +16,7 @@ class SpendingBudgetsView extends StatefulWidget {
 }
 
 class _SpendingBudgetsViewState extends State<SpendingBudgetsView> {
+
   List budgetArr = [
     {
       "name": "Auto & Transport",
@@ -43,9 +46,12 @@ class _SpendingBudgetsViewState extends State<SpendingBudgetsView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeData currentTheme = Theme.of(context);
+    bool dark = currentTheme == ThemeMode.dark;
     var media = MediaQuery.sizeOf(context);
     return Scaffold(
-      backgroundColor: TColor.gray,
+      backgroundColor: themeNotifier.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -90,14 +96,14 @@ class _SpendingBudgetsViewState extends State<SpendingBudgetsView> {
                     Text(
                       "\$82,90",
                       style: TextStyle(
-                          color: TColor.white,
+                          color: themeNotifier.textColor,
                           fontSize: 24,
                           fontWeight: FontWeight.w700),
                     ),
                     Text(
                       "of \$2,0000 budget",
                       style: TextStyle(
-                          color: TColor.gray30,
+                          color: dark?TColor.gray30:Colors.teal,
                           fontSize: 12,
                           fontWeight: FontWeight.w500),
                     ),
@@ -129,7 +135,7 @@ class _SpendingBudgetsViewState extends State<SpendingBudgetsView> {
                       Text(
                         "Your budgets are on tack 👍",
                         style: TextStyle(
-                            color: TColor.white,
+                            color: themeNotifier.textColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w600),
                       ),
@@ -176,15 +182,15 @@ class _SpendingBudgetsViewState extends State<SpendingBudgetsView> {
                         Text(
                           "Add new category ",
                           style: TextStyle(
-                              color: TColor.gray30,
-                              fontSize: 14,
+                              color: dark?TColor.gray30:Colors.teal,
+                              fontSize: 20,
                               fontWeight: FontWeight.w600),
                         ),
                         Image.asset(
                           "assets/img/add.png",
-                          width: 12,
-                          height: 12,
-                          color: TColor.gray30,
+                          width: 20,
+                          height: 20,
+                          color:  dark?TColor.gray30:Colors.teal,
                         )
                       ],
                     ),

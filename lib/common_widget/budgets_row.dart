@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../common/color_extension.dart';
+import '../view/theme/theme_notifier.dart';
 
 class BudgetsRow extends StatelessWidget {
   final Map bObj;
@@ -10,7 +12,9 @@ class BudgetsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeData currentTheme = Theme.of(context);
+    bool dark = currentTheme == ThemeMode.dark;
     var proVal = (double.tryParse(bObj["left_amount"]) ?? 0) / (double.tryParse(bObj["total_budget"]) ?? 0);
 
     return Padding(
@@ -25,7 +29,7 @@ class BudgetsRow extends StatelessWidget {
             border: Border.all(
               color: TColor.border.withOpacity(0.05),
             ),
-            color: TColor.gray60.withOpacity(0.1),
+            color: dark?TColor.gray60.withOpacity(0.1): Colors.grey.withOpacity(0.2),
             borderRadius: BorderRadius.circular(16),
           ),
           alignment: Alignment.center,
@@ -41,7 +45,7 @@ class BudgetsRow extends StatelessWidget {
                       bObj["icon"],
                       width: 30,
                       height: 30,
-                      color: TColor.gray40,
+                      color: dark?TColor.gray40:Colors.teal,
                     ),
                   ),
                   const SizedBox(
@@ -55,15 +59,15 @@ class BudgetsRow extends StatelessWidget {
                         Text(
                           bObj["name"],
                           style: TextStyle(
-                              color: TColor.white,
-                              fontSize: 14,
+                              color: themeNotifier.textColor,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600),
                         ),
                         Text(
                           "\$${bObj["left_amount"]} left to spend",
                           style: TextStyle(
-                              color: TColor.gray30,
-                              fontSize: 12,
+                              color: dark?TColor.gray30:Colors.green,
+                              fontSize: 14,
                               fontWeight: FontWeight.w500),
                         ),
                       ],
@@ -79,14 +83,14 @@ class BudgetsRow extends StatelessWidget {
                         Text(
                           "\$${bObj["spend_amount"]}",
                           style: TextStyle(
-                              color: TColor.white,
+                              color: themeNotifier.textColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w600),
                         ),
                         Text(
                           "of \$${bObj["total_budget"]}",
                           style: TextStyle(
-                              color: TColor.gray30,
+                              color: dark?TColor.gray30:Colors.green,
                               fontSize: 12,
                               fontWeight: FontWeight.w500),
                         ),

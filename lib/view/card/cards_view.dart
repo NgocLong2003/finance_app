@@ -4,8 +4,11 @@ import 'package:calendar_agenda/calendar_agenda.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trackizer/common/color_extension.dart';
 import 'package:trackizer/view/settings/settings_view.dart';
+
+import '../theme/theme_notifier.dart';
 
 class CardsView extends StatefulWidget {
   const CardsView({super.key});
@@ -56,6 +59,9 @@ class _CardsViewState extends State<CardsView> {
     SwiperController controller = SwiperController();
 
     Widget buildSwiper() {
+      final themeNotifier = Provider.of<ThemeNotifier>(context);
+      ThemeData currentTheme = Theme.of(context);
+      bool dark = currentTheme == ThemeMode.dark;
       return Swiper(
         itemCount: carArr.length,
         customLayoutOption: CustomLayoutOption(startIndex: -1, stateCount: 3)
@@ -81,8 +87,8 @@ class _CardsViewState extends State<CardsView> {
             decoration: BoxDecoration(
                 color: TColor.gray70,
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black26, blurRadius: 4)
+                boxShadow: [
+                  BoxShadow(color: dark? Colors.black26 : Colors.white10, blurRadius: 4)
                 ]),
             child: Stack(fit: StackFit.expand, children: [
               Image.asset(
@@ -149,8 +155,11 @@ class _CardsViewState extends State<CardsView> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeData currentTheme = Theme.of(context);
+    bool dark = currentTheme == ThemeMode.dark;
     return Scaffold(
-      backgroundColor: TColor.gray,
+      backgroundColor: themeNotifier.backgroundColor,
       body: SingleChildScrollView(
         child: Stack(
           alignment: Alignment.topCenter,
@@ -228,7 +237,7 @@ class _CardsViewState extends State<CardsView> {
                 Container(
                   height: 300,
                   decoration: BoxDecoration(
-                      color: TColor.gray70.withOpacity(0.5),
+                      color: themeNotifier.containerColor,
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(25),
                           topRight: Radius.circular(25))),
@@ -259,7 +268,7 @@ class _CardsViewState extends State<CardsView> {
                                   Text(
                                     "Add new card",
                                     style: TextStyle(
-                                        color: TColor.gray30,
+                                        color: dark?TColor.gray30: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -267,7 +276,7 @@ class _CardsViewState extends State<CardsView> {
                                     "assets/img/add.png",
                                     width: 12,
                                     height: 12,
-                                    color: TColor.gray30,
+                                    color: dark?TColor.gray30: Colors.black,
                                   )
                                 ],
                               ),

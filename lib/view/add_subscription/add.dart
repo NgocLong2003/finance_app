@@ -467,7 +467,12 @@ Container(
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SubscriptionInfoView(sObj: sObj),
+                        builder: (context) => SubscriptionInfoView(sObj: {
+                    "name": sObj["title"],
+                    "icon": sObj["icon"],
+                    "price": sObj["price"],
+                  },),
+                        
                       ),
                     );
                   },

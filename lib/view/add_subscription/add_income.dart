@@ -41,7 +41,6 @@ Future<void> _addIncome() async {
       'datetime': _selectedDate ?? DateTime.now(),
       'value': double.tryParse(_valueController.text) ?? 0.0,
       'isRecurring': false,
-      'endDate': null,
       'unit': "VND",
       'source': null,
     });

@@ -27,6 +27,7 @@ Stream<List<Map<String, dynamic>>> cardsStream() {
   if (user == null) {
     return const Stream.empty();
   }
+  _userID = user.uid;
 
   return FirebaseFirestore.instance
       .collection('users')

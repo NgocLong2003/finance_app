@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:trackizer/common/color_extension.dart';
-
+import 'package:trackizer/view/home/all_transactions.dart';
 import '../../common_widget/custom_arc_painter.dart';
-import '../../common_widget/segment_button.dart';
 import '../../common_widget/status_button.dart';
-import '../../common_widget/subscription_home_row.dart';
-import '../../common_widget/upcoming_bill_row.dart';
-import '../settings/settings_view.dart';
-import '../subscription_info/subscription_info_view.dart';
+import '../../common_widget/transactions_row.dart';
+import '../subscription_info/transactions_info_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -164,7 +161,6 @@ class _HomeViewState extends State<HomeView> {
 
     for (var expense in expenseSnapshot.docs) {
       final amount = expense.data()['value'] ?? 0.0;
-      print("Hello");
       temptodayExpense += amount;
     }
 
@@ -178,7 +174,7 @@ class _HomeViewState extends State<HomeView> {
         recurringAmount = temprecurringAmount;
         balanceLimit = totalBalance - savingAmount - recurringAmount;
         todayLimit = balanceLimit / daysInMonth;
-        todayExpense = temptodayExpense;
+        todayExpense = temptodayExpense/2;
         todayRemain = todayLimit - todayExpense;
         ratio = (((todayExpense/todayLimit) * 270) > 270) ? 270 : ((todayExpense/todayLimit) * 270);
 
@@ -217,6 +213,102 @@ class _HomeViewState extends State<HomeView> {
     },
     {"name": "NetFlix", "date": DateTime(2023, 07, 25), "price": "15.00"}
   ];
+
+  Future<List<Map<String, dynamic>>> _fetchTransactions() async {
+  List<Map<String, dynamic>> transactions = [];
+
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return transactions;
+
+    // Lấy dữ liệu từ incomes
+    final incomesSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('incomes')
+        .get();
+
+    for (var incomeDoc in incomesSnapshot.docs) {
+      final incomeData = incomeDoc.data();
+      
+      String categoryId = incomeData['categoryId'] ?? '';
+      print(incomeData['title']);
+      print(incomeData['categoryId']);
+
+      //Lấy thông tin category từ Firestore
+      DocumentSnapshot categoryDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('category')
+          .doc(categoryId)
+          .get();
+      
+      Map<String, dynamic> categoryData = categoryDoc.data() as Map<String, dynamic>;
+
+      transactions.add({
+        "id": incomeDoc.id,
+        "type": "income",
+        "title": incomeData['title'] ?? "",
+        "description": incomeData['description'] ?? " ",
+        "category": categoryData['name'] ?? " ",
+        "icon": "assets/img/icloud.png",// categoryData["icon"],
+        "cardId": incomeData['cardId'],
+        "datetime": (incomeData['datetime'] as Timestamp).toDate(),
+        "value": incomeData['value'] ?? 0.0,
+        "unit": incomeData['unit'] ?? "VND",
+        "isRecurring": incomeData['isRecurring'] ?? false,
+        "source": incomeData['source'],
+      });
+    }
+
+    // Lấy dữ liệu từ outcomes
+    final outcomesSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('outcomes')
+        .get();
+
+    for (var outcomeDoc in outcomesSnapshot.docs) {
+      final outcomeData = outcomeDoc.data();
+      String categoryId = outcomeDoc['categoryId'] ?? '';
+      print(outcomeDoc['title']);
+      print(outcomeDoc['categoryId']);
+
+      //Lấy thông tin category từ Firestore
+      DocumentSnapshot categoryDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('category')
+          .doc(categoryId)
+          .get();
+      
+      Map<String, dynamic> categoryData = categoryDoc.data() as Map<String, dynamic>;
+      transactions.add({
+        "id": outcomeDoc.id,
+        "type": "outcome",
+        "title": outcomeData['title'] ?? " ",
+        "description": outcomeData['description'] ?? " ",
+        "category": categoryData['name'] ?? " ",
+        "icon": "assets/img/icloud.png",// categoryData["icon"],
+        "cardId": outcomeData['cardId'],
+        "datetime": (outcomeData['datetime'] as Timestamp).toDate(),
+        "value": outcomeData['value'] ?? 0.0,
+        "unit": outcomeData['unit'] ?? "VND",
+        "expenseType": outcomeData['expenseType'],
+      });
+
+      
+    }
+
+    // Sắp xếp giao dịch theo ngày (mới nhất -> cũ nhất)
+    transactions.sort((a, b) => (b['datetime'] as DateTime).compareTo(a['datetime'] as DateTime));
+  } catch (e) {
+    print("Error fetching transactions: $e");
+  }
+
+  return transactions;
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -262,7 +354,7 @@ class _HomeViewState extends State<HomeView> {
                         height: media.width * 0.07,
                       ),
                       Text(
-                        "${NumberFormat('#,##0').format(todayExpense)}",
+                        "${NumberFormat('#,##0').format(todayExpense)} ₫",
                         style: TextStyle(
                             color: TColor.white,
                             fontSize: 40,
@@ -272,7 +364,7 @@ class _HomeViewState extends State<HomeView> {
                         height: media.width * 0.055,
                       ),
                       Text(
-                        "Remaining: ${NumberFormat('#,##0').format(todayRemain)}",
+                        "Remaining: ${NumberFormat('#,##0').format(todayRemain)} ₫",
                         style: TextStyle(
                             color: TColor.gray40,
                             fontSize: 12,
@@ -293,7 +385,7 @@ class _HomeViewState extends State<HomeView> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(
-                            "${NumberFormat('#,##0').format(totalBalance)}",
+                            "${NumberFormat('#,##0').format(totalBalance)} ₫",
                             style: TextStyle(
                                 color: TColor.white,
                                 fontSize: 14,
@@ -313,7 +405,7 @@ class _HomeViewState extends State<HomeView> {
                             Expanded(
                               child: StatusButton(
                                 title: "Limit today",
-                                value: "${NumberFormat('#,##0').format(todayLimit)}",
+                                value: "${NumberFormat('#,##0').format(todayLimit)} ₫",
                                 statusColor: TColor.secondary,
                                 onPressed: () {},
                               ),
@@ -324,7 +416,7 @@ class _HomeViewState extends State<HomeView> {
                             Expanded(
                               child: StatusButton(
                                 title: "Recurring",
-                                value: "${NumberFormat('#,##0').format(recurringAmount)}",
+                                value: "${NumberFormat('#,##0').format(recurringAmount)} ₫",
                                 statusColor: TColor.primary10,
                                 onPressed: () {},
                               ),
@@ -335,7 +427,7 @@ class _HomeViewState extends State<HomeView> {
                             Expanded(
                               child: StatusButton(
                                 title: "Saving today",
-                                value: "${NumberFormat('#,##0').format(dailySaving)}",
+                                value: "${NumberFormat('#,##0').format(dailySaving)} ₫",
                                 statusColor: TColor.secondaryG,
                                 onPressed: () {},
                               ),
@@ -348,75 +440,101 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              height: 50,
-              decoration: BoxDecoration(
-                  color: Colors.black, borderRadius: BorderRadius.circular(15)),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SegmentButton(
-                      title: "Your subscription",
-                      isActive: isSubscription,
-                      onPressed: () {
-                        setState(() {
-                          isSubscription = !isSubscription;
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: SegmentButton(
-                      title: "Upcoming bills",
-                      isActive: !isSubscription,
-                      onPressed: () {
-                        setState(() {
-                          isSubscription = !isSubscription;
-                        });
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-            if (isSubscription)
-              ListView.builder(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: subArr.length,
-                  itemBuilder: (context, index) {
-                    var sObj = subArr[index] as Map? ?? {};
+Container(
+  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+  height: 50,
+  decoration: BoxDecoration(
+      color: TColor.gray70, borderRadius: BorderRadius.circular(15)),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Tách đều 2 bên
+    children: [
+      // Chữ "Transactions" ở lề trái
+      Text(
+        "Transactions",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      // Chữ "See all" ở lề phải
+      GestureDetector(
+        onTap: () {
+          // Hành động khi bấm vào "See all"
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AllTransactions() ));
+          print("All transactions");
+        },
+        child: Text(
+          "See all",
+          style: TextStyle(
+            color: Colors.blue,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ],
+  ),
+),
 
-                    return SubScriptionHomeRow(
-                      sObj: sObj,
-                      onPressed: () {
-
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SubscriptionInfoView( sObj: sObj ) ));
-                      },
+Container(
+      height: 380, // Điều chỉnh chiều cao theo ý muốn
+      child: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _fetchTransactions(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No transactions found"));
+          } else {
+            List<Map<String, dynamic>> transactions = snapshot.data!;
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                var sObj = transactions[index] as Map? ?? {};
+                return TransactionRow(
+                  sObj: {
+                    "type": sObj["type"],
+                    "title": sObj["title"],
+                    "icon": sObj["icon"],
+                    "value": sObj["value"],
+                    "datetime": sObj["datetime"],
+                  },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TransactionsInfoView(sObj: {
+                    "id": sObj["id"],
+                    "type": sObj["type"],
+                    "title": sObj["title"],
+                    "icon": sObj["icon"],
+                    "value": sObj["value"],
+                    "category": sObj["category"],
+                    "datetime": sObj["datetime"],
+                    "description": sObj["description"],
+                    "currency": sObj["unit"],
+                    "expenseType": sObj["expenseType"],
+                  },),
+                        
+                      ),
                     );
-                  }),
-            if (!isSubscription)
-              ListView.builder(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: subArr.length,
-                  itemBuilder: (context, index) {
-                    var sObj = subArr[index] as Map? ?? {};
+                  },
+                );
+              },
+            );
+          }
+        },
+      ),
+),
 
-                    return UpcomingBillRow(
-                      sObj: sObj,
-                      onPressed: () {},
-                    );
-                  }),
-            const SizedBox(
-              height: 110,
-            ),
+      SizedBox(height: 50,)
           ],
         ),
       ),

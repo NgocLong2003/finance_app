@@ -32,7 +32,8 @@ class _MainTabViewState extends State<MainTabView> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    ThemeData currentTheme = Theme.of(context);
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
     return Scaffold(
       backgroundColor: themeNotifier.containerColor,
       body: Stack(children: [

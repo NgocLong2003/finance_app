@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../common/color_extension.dart';
+import '../view/theme/theme_notifier.dart';
 
 class RoundTextField extends StatelessWidget {
   final String title;
@@ -18,6 +20,7 @@ class RoundTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,7 +30,7 @@ class RoundTextField extends StatelessWidget {
               child: Text(
                 title,
                 textAlign: titleAlign,
-                style: TextStyle(color: TColor.white, fontSize: 12),
+                style: TextStyle(color: themeNotifier.textColor, fontSize: 16),
               ),
             )
           ],
@@ -52,7 +55,7 @@ class RoundTextField extends StatelessWidget {
             keyboardType: keyboardType,
             obscureText: obscureText,
             style: TextStyle(
-              color: Colors.white, // Set text color to white
+              color: themeNotifier.textColor, // Set text color to white
             ),
           ),
         )

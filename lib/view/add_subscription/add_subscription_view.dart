@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trackizer/common/color_extension.dart';
 import 'package:trackizer/common_widget/primary_button.dart';
 import 'package:trackizer/common_widget/round_textfield.dart';
 
 import '../../common_widget/image_button.dart';
+import '../theme/theme_notifier.dart';
 
 class AddSubScriptionView extends StatefulWidget {
   const AddSubScriptionView({super.key});
@@ -32,14 +34,17 @@ class _AddSubScriptionViewState extends State<AddSubScriptionView> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
     return Scaffold(
-      backgroundColor: TColor.gray,
+      backgroundColor: themeNotifier.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: TColor.gray70.withOpacity(0.5),
+                  color: themeNotifier.containerColor,
                   borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(25),
                       bottomRight: Radius.circular(25))),
@@ -69,7 +74,7 @@ class _AddSubScriptionViewState extends State<AddSubScriptionView> {
                             Text(
                               "New",
                               style:
-                                  TextStyle(color: TColor.gray30, fontSize: 16),
+                                  TextStyle(color: dark?TColor.gray30:Colors.white70, fontSize: 20, fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
@@ -120,7 +125,7 @@ class _AddSubScriptionViewState extends State<AddSubScriptionView> {
                                   sObj["name"],
                                   style: TextStyle(
                                       color: TColor.white,
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w600),
                                 )
                               ],
@@ -166,8 +171,8 @@ class _AddSubScriptionViewState extends State<AddSubScriptionView> {
                         Text(
                         "Monthly price",
                         style: TextStyle(
-                            color: TColor.gray40,
-                            fontSize: 12,
+                            color: dark?TColor.gray40:Colors.green,
+                            fontSize: 14,
                             fontWeight: FontWeight.w600),
                       ),
 
@@ -176,7 +181,7 @@ class _AddSubScriptionViewState extends State<AddSubScriptionView> {
                        Text(
                         "\$${amountVal.toStringAsFixed(2)}",
                         style: TextStyle(
-                            color: TColor.white,
+                            color: themeNotifier.textColor,
                             fontSize: 40,
                             fontWeight: FontWeight.w700),
                       ),
@@ -187,7 +192,7 @@ class _AddSubScriptionViewState extends State<AddSubScriptionView> {
                       Container(
                         width: 150,
                         height: 1,
-                        color: TColor.gray70,
+                        color: dark?TColor.gray70:Colors.teal,
                       )
                     ],
                   ),

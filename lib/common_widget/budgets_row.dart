@@ -13,8 +13,8 @@ class BudgetsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    ThemeData currentTheme = Theme.of(context);
-    bool dark = currentTheme == ThemeMode.dark;
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
     var proVal = (double.tryParse(bObj["left_amount"]) ?? 0) / (double.tryParse(bObj["total_budget"]) ?? 0);
 
     return Padding(

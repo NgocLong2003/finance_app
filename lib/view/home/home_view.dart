@@ -120,7 +120,7 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         "\$1,235",
                         style: TextStyle(
-                            color: themeNotifier.textColor,
+                            color: TColor.white,
                             fontSize: 40,
                             fontWeight: FontWeight.w700),
                       ),
@@ -130,7 +130,7 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         "This month bills",
                         style: TextStyle(
-                            color: themeNotifier.textColor,
+                            color: TColor.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w600),
                       ),
@@ -151,7 +151,7 @@ class _HomeViewState extends State<HomeView> {
                           child: Text(
                             "See your budget",
                             style: TextStyle(
-                                color: themeNotifier.textColor,
+                                color: Colors.white70,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600),
                           ),

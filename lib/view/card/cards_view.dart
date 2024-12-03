@@ -60,7 +60,7 @@ class _CardsViewState extends State<CardsView> {
 
     Widget buildSwiper() {
       final themeNotifier = Provider.of<ThemeNotifier>(context);
-      ThemeData currentTheme = Theme.of(context);
+      ThemeMode currentTheme = themeNotifier.themeMode;
       bool dark = currentTheme == ThemeMode.dark;
       return Swiper(
         itemCount: carArr.length,
@@ -156,8 +156,8 @@ class _CardsViewState extends State<CardsView> {
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    ThemeData currentTheme = Theme.of(context);
-    bool dark = currentTheme == ThemeMode.dark;
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
     return Scaffold(
       backgroundColor: themeNotifier.backgroundColor,
       body: SingleChildScrollView(
@@ -181,7 +181,7 @@ class _CardsViewState extends State<CardsView> {
                           Text(
                             "Credit Cards",
                             style:
-                                TextStyle(color: TColor.gray30, fontSize: 16),
+                                TextStyle(color: dark?TColor.gray30:Colors.black87, fontSize: 16),
                           ),
                         ],
                       ),
@@ -231,7 +231,7 @@ class _CardsViewState extends State<CardsView> {
                 // ),
 
                 const SizedBox(
-                  height: 40,
+                  height: 70,
                 ),
 
                 Container(
@@ -268,15 +268,15 @@ class _CardsViewState extends State<CardsView> {
                                   Text(
                                     "Add new card",
                                     style: TextStyle(
-                                        color: dark?TColor.gray30: Colors.black,
-                                        fontSize: 14,
+                                        color: dark?TColor.gray30: TColor.white,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Image.asset(
                                     "assets/img/add.png",
-                                    width: 12,
-                                    height: 12,
-                                    color: dark?TColor.gray30: Colors.black,
+                                    width: 18,
+                                    height: 18,
+                                    color: dark?TColor.gray30: TColor.white,
                                   )
                                 ],
                               ),

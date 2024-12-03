@@ -100,6 +100,7 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
     print(currentThemeMode);
     var media = MediaQuery.sizeOf(context);
     User? currentUser = FirebaseAuth.instance.currentUser;

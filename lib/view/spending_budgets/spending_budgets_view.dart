@@ -47,8 +47,9 @@ class _SpendingBudgetsViewState extends State<SpendingBudgetsView> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    ThemeData currentTheme = Theme.of(context);
-    bool dark = currentTheme == ThemeMode.dark;
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
+    print(dark);
     var media = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: themeNotifier.backgroundColor,
@@ -103,7 +104,7 @@ class _SpendingBudgetsViewState extends State<SpendingBudgetsView> {
                     Text(
                       "of \$2,0000 budget",
                       style: TextStyle(
-                          color: dark?TColor.gray30:Colors.teal,
+                          color: dark==true?TColor.gray30:Colors.teal,
                           fontSize: 12,
                           fontWeight: FontWeight.w500),
                     ),

@@ -7,6 +7,7 @@ import 'sign_in_view.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/secondary_boutton.dart';
+import 'package:trackizer/view/add_subscription/add_templates.dart';
 
 class SocialLoginView extends StatefulWidget {
   const SocialLoginView({super.key});
@@ -27,7 +28,8 @@ Future<void> _signInWithGoogle(BuildContext context) async {
     );
 
     await FirebaseAuth.instance.signInWithCredential(credential);
-
+      addSampleCardsForUser(context);
+      addSampleCategoriesForUser(context);
     // Điều hướng sang MainTabView sau khi đăng nhập thành công
     Navigator.pushReplacement(
       context,

@@ -6,6 +6,7 @@ import '../../common/color_extension.dart';
 import '../../common_widget/primary_button.dart';
 import '../../common_widget/round_textfield.dart';
 import '../../common_widget/secondary_boutton.dart';
+import 'package:trackizer/view/add_subscription/add_templates.dart';
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -26,7 +27,8 @@ class _SignInViewState extends State<SignInView> {
         email: email,
         password: password,
       );
-
+      addSampleCardsForUser(context);
+      addSampleCategoriesForUser(context);
       // Đăng nhập thành công, điều hướng đến MainTabView (giả định đã có trang này)
       Navigator.pushReplacement(
         context,

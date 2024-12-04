@@ -28,7 +28,7 @@ class _AllTransactionsState extends State<AllTransactions> {
     if (user == null) return transactions;
 
     // Lấy dữ liệu từ incomes
-    if(type == "income"){
+    if(type == "incomes"){
         final incomesSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
@@ -54,7 +54,7 @@ class _AllTransactionsState extends State<AllTransactions> {
 
         transactions.add({
           "id": incomeDoc.id,
-          "type": "income",
+          "type": "incomes",
           "title": incomeData['title'] ?? "",
           "description": incomeData['description'] ?? " ",
           "category": categoryData['name'] ?? " ",
@@ -94,7 +94,7 @@ class _AllTransactionsState extends State<AllTransactions> {
         Map<String, dynamic> categoryData = categoryDoc.data() as Map<String, dynamic>;
         transactions.add({
           "id": outcomeDoc.id,
-          "type": "outcome",
+          "type": "outcomes",
           "title": outcomeData['title'] ?? " ",
           "description": outcomeData['description'] ?? " ",
           "category": categoryData['name'] ?? " ",
@@ -176,7 +176,7 @@ Container(
 if (isOutcome)
 Container(
       child: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _fetchTransactions("outcome"),
+        future: _fetchTransactions("outcomes"),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -231,7 +231,7 @@ Container(
 if (!isOutcome)
 Container(
       child: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _fetchTransactions("income"),
+        future: _fetchTransactions("incomes"),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

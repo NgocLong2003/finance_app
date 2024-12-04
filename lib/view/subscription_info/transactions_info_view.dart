@@ -4,6 +4,8 @@ import 'package:trackizer/common_widget/secondary_boutton.dart';
 import '../../common/color_extension.dart';
 import '../../common_widget/editable_row.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TransactionsInfoView extends StatefulWidget {
   final Map sObj;
@@ -69,6 +71,14 @@ class _TransactionsInfoViewState extends State<TransactionsInfoView> {
                               ),
                               IconButton(
                                 onPressed: () {
+                                  FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(FirebaseAuth.instance.currentUser?.uid)
+                                  .collection(sObj["type"])
+                                  .doc(sObj["id"])
+                                  .delete();
+                        Navigator.pop(context);
+                        setState(() {});
                                   //delete trong database
                                   Navigator.pop(context);
                                 },
@@ -168,7 +178,7 @@ class _TransactionsInfoViewState extends State<TransactionsInfoView> {
                                     });
                                   },
                                 ),
-                                if (sObj["type"] == "outcome")
+                                if (sObj["type"] == "outcomes")
                                   EditableRow(
                                     title: "Expense Type",
                                     value: sObj["expenseType"],
@@ -196,8 +206,18 @@ class _TransactionsInfoViewState extends State<TransactionsInfoView> {
                           SecondaryButton(
                               title: "Save",
                               onPressed: () {
-                                // Update trong database
-                                print("Updated data: $sObj");
+                          FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser?.uid)
+                            .collection(sObj["type"])
+                            .doc(sObj["id"])
+                            .update({
+                          'title': sObj["title"],
+                          'description': sObj["description"],
+                          'value': sObj["value"],
+                        });
+                        Navigator.pop(context);
+                                
                               }),
                         ],
                       ),

@@ -232,8 +232,6 @@ class _HomeViewState extends State<HomeView> {
       final incomeData = incomeDoc.data();
       
       String categoryId = incomeData['categoryId'] ?? '';
-      print(incomeData['title']);
-      print(incomeData['categoryId']);
 
       //Lấy thông tin category từ Firestore
       DocumentSnapshot categoryDoc = await FirebaseFirestore.instance
@@ -247,7 +245,7 @@ class _HomeViewState extends State<HomeView> {
 
       transactions.add({
         "id": incomeDoc.id,
-        "type": "income",
+        "types": "income",
         "title": incomeData['title'] ?? "",
         "description": incomeData['description'] ?? " ",
         "category": categoryData['name'] ?? " ",
@@ -271,8 +269,6 @@ class _HomeViewState extends State<HomeView> {
     for (var outcomeDoc in outcomesSnapshot.docs) {
       final outcomeData = outcomeDoc.data();
       String categoryId = outcomeDoc['categoryId'] ?? '';
-      print(outcomeDoc['title']);
-      print(outcomeDoc['categoryId']);
 
       //Lấy thông tin category từ Firestore
       DocumentSnapshot categoryDoc = await FirebaseFirestore.instance
@@ -285,7 +281,7 @@ class _HomeViewState extends State<HomeView> {
       Map<String, dynamic> categoryData = categoryDoc.data() as Map<String, dynamic>;
       transactions.add({
         "id": outcomeDoc.id,
-        "type": "outcome",
+        "type": "outcomes",
         "title": outcomeData['title'] ?? " ",
         "description": outcomeData['description'] ?? " ",
         "category": categoryData['name'] ?? " ",
@@ -463,7 +459,6 @@ Container(
         onTap: () {
           // Hành động khi bấm vào "See all"
           Navigator.push(context, MaterialPageRoute(builder: (context) => AllTransactions() ));
-          print("All transactions");
         },
         child: Text(
           "See all",

@@ -83,7 +83,7 @@ class IconItemSwitchRow extends StatelessWidget {
             icon,
             width: 20,
             height: 20,
-            color: currentThemeMode== ThemeMode.dark?TColor.gray20:Colors.black,
+            color: currentThemeMode== ThemeMode.dark?TColor.gray20:Colors.white.withOpacity(0.5),
           ),
           const SizedBox(
             width: 15,
@@ -91,7 +91,7 @@ class IconItemSwitchRow extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-                color: themeNotifier.textColor, fontSize: 14, fontWeight: FontWeight.w600),
+                color: TColor.white, fontSize: 14, fontWeight: FontWeight.w600),
           ),
           Spacer(),
           const SizedBox(

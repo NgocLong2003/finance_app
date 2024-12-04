@@ -242,7 +242,7 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         IconItemSwitchRow(
                           title: "Dark",
-                          icon: "assets/img/light_theme.png",
+                          icon: dark?"assets/img/dark-theme.png":"assets/img/light_theme.png",
                           value: context.watch<ThemeNotifier>().themeMode ==
                               ThemeMode.dark,
                           didChange: (newVal) {
@@ -288,12 +288,12 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                           icon: Icon(
                             Icons.lock, // Icon Change Password
-                            color: themeNotifier.textColor,
+                            color: dark?TColor.gray20:Colors.white.withOpacity(0.5),
                           ),
                           label: Text(
                             "Change Password",
                             style: TextStyle(
-                              color: themeNotifier.textColor,
+                              color: TColor.white,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -313,12 +313,12 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                           icon: Icon(
                             Icons.logout, // Icon Logout
-                            color: themeNotifier.textColor,
+                            color: dark?TColor.gray20:Colors.white.withOpacity(0.5),
                           ),
                           label: Text(
                             "Logout",
                             style: TextStyle(
-                              color: themeNotifier.textColor,
+                              color: TColor.white,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),

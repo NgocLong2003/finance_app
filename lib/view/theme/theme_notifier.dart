@@ -19,4 +19,6 @@ class ThemeNotifier extends ChangeNotifier {
   Color get secondContainerColor =>isDarkMode ? TColor.gray30.withOpacity(0.3) : Colors.teal.withOpacity(0.3);
   Color get box => isDarkMode? Colors.black : Colors.white;
   Color get paddingColor => isDarkMode? TColor.gray60.withOpacity(0.2): Colors.teal.withOpacity(0.3);
+  Color get selectedColor => isDarkMode? Colors.teal : Colors.white;
+
 }

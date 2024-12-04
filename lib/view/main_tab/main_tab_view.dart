@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:trackizer/view/add_subscription/add_subscription_view.dart';
+import 'package:trackizer/view/settings/settings_view.dart';
 
 import '../../common/color_extension.dart';
 import '../calender/calender_view.dart';
@@ -67,8 +68,8 @@ class _MainTabViewState extends State<MainTabView> {
                                 width: 20,
                                 height: 20,
                                 color: selectTab == 0
-                                    ? themeNotifier.textColor
-                                    : themeNotifier.secondContainerColor,
+                                    ? (dark?TColor.white: Colors.tealAccent)
+                                    :TColor.white.withOpacity(0.5),
                               ),
                             ),
                             IconButton(
@@ -83,8 +84,8 @@ class _MainTabViewState extends State<MainTabView> {
                                 width: 20,
                                 height: 20,
                                 color: selectTab == 1
-                                    ? themeNotifier.textColor
-                                    : themeNotifier.secondContainerColor,
+                                    ? (dark?TColor.white: Colors.tealAccent)
+                                    : TColor.white.withOpacity(0.5),
                               ),
                             ),
                             const SizedBox(
@@ -95,22 +96,6 @@ class _MainTabViewState extends State<MainTabView> {
                               onPressed: () {
                                 setState(() {
                                   selectTab = 2;
-                                  currentTabView = CalenderView();
-                                });
-                              },
-                              icon: Image.asset(
-                                "assets/img/calendar.png",
-                                width: 20,
-                                height: 20,
-                                color: selectTab == 2
-                                    ? themeNotifier.textColor
-                                    : themeNotifier.secondContainerColor,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  selectTab = 3;
                                   currentTabView = CardsView();
                                 });
                               },
@@ -118,9 +103,25 @@ class _MainTabViewState extends State<MainTabView> {
                                 "assets/img/creditcards.png",
                                 width: 20,
                                 height: 20,
+                                color: selectTab == 2
+                                    ? (dark?TColor.white: Colors.tealAccent)
+                                    : TColor.white.withOpacity(0.5),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  selectTab = 3;
+                                  currentTabView = SettingsView();
+                                });
+                              },
+                              icon: Image.asset(
+                                "assets/img/person.png",
+                                width: 23,
+                                height: 23,
                                 color: selectTab == 3
-                                    ? themeNotifier.textColor
-                                    : themeNotifier.secondContainerColor,
+                                    ? (dark?TColor.white: Colors.tealAccent)
+                                    : TColor.white.withOpacity(0.5),
                               ),
                             ),
                           ],

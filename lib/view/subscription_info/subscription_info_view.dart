@@ -1,9 +1,11 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trackizer/common_widget/secondary_boutton.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/item_row.dart';
+import '../theme/theme_notifier.dart';
 
 class SubscriptionInfoView extends StatefulWidget {
   final Map sObj;
@@ -16,9 +18,12 @@ class SubscriptionInfoView extends StatefulWidget {
 class _SubscriptionInfoViewState extends State<SubscriptionInfoView> {
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
     var media = MediaQuery.sizeOf(context);
     return Scaffold(
-      backgroundColor: TColor.gray,
+      backgroundColor: dark?TColor.gray:Colors.white60,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Stack(

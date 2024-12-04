@@ -98,7 +98,7 @@ Future<void> _addOutcome() async {
           "id": doc.id, // Thêm ID của category để biết cách xử lý
           "name": doc["name"] ?? "Unknown",
           "type": doc["type"] ?? "unknown",
-          "icon": /*doc["icon"] ??*/ "assets/img/icloud.png", // Mặc định icon
+          "icon": doc["icon"], // Mặc định icon
           "color": doc["color"] ?? "#FFFFFF",
           "isCustom": doc["isCustom"] ?? false,
         };

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:trackizer/view/add_subscription/add.dart';
+import 'package:trackizer/view/settings/settings_view.dart';
 
 import '../../common/color_extension.dart';
 import '../calender/calender_view.dart';
 import '../card/cards_view.dart';
 import '../home/home_view.dart';
 import '../spending_budgets/spending_budgets_view.dart';
+import '../theme/theme_notifier.dart';
 
 class MainTabView extends StatefulWidget {
   const MainTabView({super.key});
@@ -29,8 +32,11 @@ class _MainTabViewState extends State<MainTabView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
     return Scaffold(
-      backgroundColor: TColor.gray,
+      backgroundColor: themeNotifier.containerColor,
       body: Stack(children: [
         PageStorage(bucket: pageStorageBucket, child: currentTabView),
         SafeArea(
@@ -62,8 +68,8 @@ class _MainTabViewState extends State<MainTabView> {
                                 width: 20,
                                 height: 20,
                                 color: selectTab == 0
-                                    ? TColor.white
-                                    : TColor.gray30,
+                                    ? (dark?TColor.white: Colors.tealAccent)
+                                    :TColor.white.withOpacity(0.5),
                               ),
                             ),
                             IconButton(
@@ -78,8 +84,8 @@ class _MainTabViewState extends State<MainTabView> {
                                 width: 20,
                                 height: 20,
                                 color: selectTab == 1
-                                    ? TColor.white
-                                    : TColor.gray30,
+                                    ? (dark?TColor.white: Colors.tealAccent)
+                                    : TColor.white.withOpacity(0.5),
                               ),
                             ),
                             const SizedBox(
@@ -90,22 +96,6 @@ class _MainTabViewState extends State<MainTabView> {
                               onPressed: () {
                                 setState(() {
                                   selectTab = 2;
-                                  currentTabView = CalenderView();
-                                });
-                              },
-                              icon: Image.asset(
-                                "assets/img/calendar.png",
-                                width: 20,
-                                height: 20,
-                                color: selectTab == 2
-                                    ? TColor.white
-                                    : TColor.gray30,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  selectTab = 3;
                                   currentTabView = CardsView();
                                 });
                               },
@@ -113,9 +103,25 @@ class _MainTabViewState extends State<MainTabView> {
                                 "assets/img/creditcards.png",
                                 width: 20,
                                 height: 20,
+                                color: selectTab == 2
+                                    ? (dark?TColor.white: Colors.tealAccent)
+                                    : TColor.white.withOpacity(0.5),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  selectTab = 3;
+                                  currentTabView = SettingsView();
+                                });
+                              },
+                              icon: Image.asset(
+                                "assets/img/person.png",
+                                width: 23,
+                                height: 23,
                                 color: selectTab == 3
-                                    ? TColor.white
-                                    : TColor.gray30,
+                                    ? (dark?TColor.white: Colors.tealAccent)
+                                    : TColor.white.withOpacity(0.5),
                               ),
                             ),
                           ],
@@ -130,7 +136,7 @@ class _MainTabViewState extends State<MainTabView> {
                         margin: const EdgeInsets.all(20),
                         decoration: BoxDecoration(boxShadow: [
                           BoxShadow(
-                              color: TColor.secondary.withOpacity(0.25),
+                              color: themeNotifier.backgroundColor.withOpacity(0.25),
                               blurRadius: 10,
                               offset: const Offset(0, 4))
                         ], borderRadius: BorderRadius.circular(50)),

@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/icon_item_row.dart';
+import '../login/welcome_view.dart';
+import '../theme/theme_notifier.dart';
+import 'change_password.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -13,11 +18,97 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   bool isActive = false;
 
+  void _logout() {
+    // Add your logout logic here (e.g., clearing user session, Firebase sign out, etc.)
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const WelcomeView()),
+          (route) => false, // Removes all the previous routes
+    );
+  }
+  // void _changePassword() async {
+  //   final TextEditingController newPasswordController = TextEditingController();
+  //
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: const Text("Change Password"),
+  //         content: TextField(
+  //           controller: newPasswordController,
+  //           obscureText: true,
+  //           decoration: const InputDecoration(
+  //             hintText: "Enter new password",
+  //           ),
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () => Navigator.pop(context), // Đóng hộp thoại
+  //             child: const Text("Cancel"),
+  //           ),
+  //           TextButton(
+  //             onPressed: () async {
+  //               String newPassword = newPasswordController.text.trim();
+  //
+  //               if (newPassword.isEmpty) {
+  //                 ScaffoldMessenger.of(context).showSnackBar(
+  //                   const SnackBar(
+  //                     content: Text("Password cannot be empty."),
+  //                     backgroundColor: Colors.red,
+  //                   ),
+  //                 );
+  //                 return;
+  //               }
+  //
+  //               try {
+  //                 User? user = FirebaseAuth.instance.currentUser;
+  //                 if (user != null) {
+  //                   await user.updatePassword(newPassword);
+  //                   ScaffoldMessenger.of(context).showSnackBar(
+  //                     const SnackBar(
+  //                       content: Text("Password updated successfully."),
+  //                       backgroundColor: Colors.green,
+  //                     ),
+  //                   );
+  //                 } else {
+  //                   ScaffoldMessenger.of(context).showSnackBar(
+  //                     const SnackBar(
+  //                       content: Text("No user is currently signed in."),
+  //                       backgroundColor: Colors.red,
+  //                     ),
+  //                   );
+  //                 }
+  //                 Navigator.pop(context); // Đóng hộp thoại sau khi đổi mật khẩu thành công
+  //               } catch (e) {
+  //                 ScaffoldMessenger.of(context).showSnackBar(
+  //                   SnackBar(
+  //                     content: Text("Error: ${e.toString()}"),
+  //                     backgroundColor: Colors.red,
+  //                   ),
+  //                 );
+  //               }
+  //             },
+  //             child: const Text("Save"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    ThemeMode currentThemeMode = themeNotifier.themeMode;
+    bool dark = currentThemeMode == ThemeMode.dark;
+    print(currentThemeMode);
     var media = MediaQuery.sizeOf(context);
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    String email =
+        currentUser?.email ?? 'No email available'; // Default if no email found
+
     return Scaffold(
-      backgroundColor: TColor.gray,
+      backgroundColor: themeNotifier.backgroundColor,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(children: [
@@ -32,7 +123,11 @@ class _SettingsViewState extends State<SettingsView> {
                           Navigator.pop(context);
                         },
                         icon: Image.asset("assets/img/back.png",
-                            width: 25, height: 25, color: TColor.gray30))
+                            width: 25,
+                            height: 25,
+                            color: currentThemeMode == ThemeMode.dark
+                                ? TColor.gray30
+                                : Colors.black))
                   ],
                 ),
                 Row(
@@ -40,15 +135,17 @@ class _SettingsViewState extends State<SettingsView> {
                   children: [
                     Text(
                       "Settings",
-                      style: TextStyle(color: TColor.gray30, fontSize: 16),
+                      style: TextStyle(
+                          color: currentThemeMode == ThemeMode.dark
+                              ? TColor.gray30
+                              : Colors.black,
+                          fontSize: 16),
                     )
                   ],
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -59,154 +156,73 @@ class _SettingsViewState extends State<SettingsView> {
                 )
               ],
             ),
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Code For Any",
+                  email,
                   style: TextStyle(
-                      color: TColor.white,
+                      color: themeNotifier.textColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w700),
                 )
               ],
             ),
-            const SizedBox(
-              height: 4,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "codeforany@gmail.com",
-                  style: TextStyle(
-                      color: TColor.gray30,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            InkWell(
-              borderRadius: BorderRadius.circular(15),
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: TColor.border.withOpacity(0.15),
-                  ),
-                  color: TColor.gray60.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(
-                  "Edit profile",
-                  style: TextStyle(
-                      color: TColor.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
+            const SizedBox(height: 4),
+
+            const SizedBox(height: 15),
+
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 8),
-                    child: Text(
-                      "General",
-                      style: TextStyle(
-                          color: TColor.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: TColor.border.withOpacity(0.1),
-                      ),
-                      color: TColor.gray60.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      children: [
-                        IconItemRow(
-                          title: "Security",
-                          icon: "assets/img/face_id.png",
-                          value: "FaceID",
-                        ),
-                        IconItemSwitchRow(
-                          title: "iCloud Sync",
-                          icon: "assets/img/icloud.png",
-                          value: isActive,
-                          didChange: (newVal) {
-                            setState(() {
-                              isActive = newVal;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 8),
-                    child: Text(
-                      "My subscription",
-                      style: TextStyle(
-                          color: TColor.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: TColor.border.withOpacity(0.1),
-                      ),
-                      color: TColor.gray60.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      children: [
-                        IconItemRow(
-                          title: "Sorting",
-                          icon: "assets/img/sorting.png",
-                          value: "Date",
-                        ),
-
-                        IconItemRow(
-                          title: "Summary",
-                          icon: "assets/img/chart.png",
-                          value: "Average",
-                        ),
-
-                        IconItemRow(
-                          title: "Default currency",
-                          icon: "assets/img/money.png",
-                          value: "USD (\$)",
-                        ),
-                        
-                      ],
-                    ),
-                  ),
-
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 20, bottom: 8),
+                  //   child: Text(
+                  //     "My subscription",
+                  //     style: TextStyle(
+                  //         color: themeNotifier.textColor,
+                  //         fontSize: 14,
+                  //         fontWeight: FontWeight.w600),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(vertical: 8),
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(
+                  //       color: TColor.border.withOpacity(0.1),
+                  //     ),
+                  //     color: currentThemeMode == ThemeMode.dark ? TColor.gray60.withOpacity(0.2) : Colors.teal,
+                  //     borderRadius: BorderRadius.circular(16),
+                  //   ),
+                  //   child: Column(
+                  //     children: [
+                  //       IconItemRow(
+                  //         title: "Sorting",
+                  //         icon: "assets/img/sorting.png",
+                  //         value: "Date",
+                  //       ),
+                  //       IconItemRow(
+                  //         title: "Summary",
+                  //         icon: "assets/img/chart.png",
+                  //         value: "Average",
+                  //       ),
+                  //       IconItemRow(
+                  //         title: "Default currency",
+                  //         icon: "assets/img/money.png",
+                  //         value: "USD (\$)",
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 8),
                     child: Text(
                       "Appearance",
                       style: TextStyle(
-                          color: TColor.white,
+                          color: themeNotifier.textColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w600),
                     ),
@@ -217,33 +233,105 @@ class _SettingsViewState extends State<SettingsView> {
                       border: Border.all(
                         color: TColor.border.withOpacity(0.1),
                       ),
-                      color: TColor.gray60.withOpacity(0.2),
+                      color: currentThemeMode == ThemeMode.dark
+                          ? TColor.gray60.withOpacity(0.2)
+                          : Colors.teal,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
                       children: [
-                        IconItemRow(
-                          title: "App icon",
-                          icon: "assets/img/app_icon.png",
-                          value: "Default",
+                        IconItemSwitchRow(
+                          title: "Dark",
+                          icon: dark?"assets/img/dark-theme.png":"assets/img/light_theme.png",
+                          value: context.watch<ThemeNotifier>().themeMode ==
+                              ThemeMode.dark,
+                          didChange: (newVal) {
+                            print(
+                                "New Value: $newVal"); // Kiểm tra khi thay đổi theme
+                            context.read<ThemeNotifier>().toggleTheme();
+                          },
                         ),
-                        IconItemRow(
-                          title: "Theme",
-                          icon: "assets/img/light_theme.png",
-                          value: "Dark",
-                        ),
-                        IconItemRow(
-                          title: "Font",
-                          icon: "assets/img/font.png",
-                          value: "Inter",
-                        ),
-                        
                       ],
                     ),
                   ),
+                  // Move Logout button out of the IconItemSwitchRow container
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Authentication",
+                          style: TextStyle(
+                              color: themeNotifier.textColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton.icon(
+                          onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ChangePasswordView(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: currentThemeMode == ThemeMode.dark
+                                ? TColor.gray60.withOpacity(0.2)
+                                : Colors.teal, // Màu nền nút
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16), // Bo góc nút
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.lock, // Icon Change Password
+                            color: dark?TColor.gray20:Colors.white.withOpacity(0.5),
+                          ),
+                          label: Text(
+                            "Change Password",
+                            style: TextStyle(
+                              color: TColor.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton.icon(
+                          onPressed: _logout, // Gọi hàm _logout khi bấm nút
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: currentThemeMode == ThemeMode.dark
+                                ? TColor.gray60.withOpacity(0.2)
+                                : Colors.teal, // Màu nền nút
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16), // Bo góc nút
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.logout, // Icon Logout
+                            color: dark?TColor.gray20:Colors.white.withOpacity(0.5),
+                          ),
+                          label: Text(
+                            "Logout",
+                            style: TextStyle(
+                              color: TColor.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+
                 ],
               ),
-            )
+            ),
           ]),
         ),
       ),
